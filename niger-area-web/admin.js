@@ -154,19 +154,19 @@ function vSettings() {
 
 function vGate() {
   if (!gate.has_password) return `<div class="setup"><span class="stamp">Owner only</span><h1>Control room</h1>
-    <p class="lede">Create an owner password. You will need it, on top of your normal login, every time you open the control room.</p>
+    <p class="lede">Create an owner password. This is a <b>second password</b>, different from your sign-in password. You will need it every time you open the control room.</p>
     <form class="panel hero" onsubmit="event.preventDefault();ACT.setpw()">
       <label class="f">New owner password<input id="pw-new" type="password" autocomplete="new-password" minlength="10" required></label>
       <label class="f">Type it again<input id="pw-again" type="password" autocomplete="new-password" minlength="10" required></label>
       <p class="small muted">At least 10 characters, with letters and numbers. Don't reuse your email password. It is stored scrambled and cannot be recovered, so keep it somewhere safe.</p>
       <div><button class="btn primary" type="submit">Create password</button></div></form></div>`;
   return `<div class="setup"><span class="stamp">Owner only</span><h1>Control room</h1>
-    <p class="lede">Enter your owner password to unlock the control room on this device for 2 hours.</p>
+    <p class="lede">Enter your <b>owner password</b> to unlock the control room on this device for 2 hours. This is the second password you created the first time you opened the control room, <b>not</b> your sign-in password.</p>
     <form class="panel hero" onsubmit="event.preventDefault();ACT.unlock()">
-      <label class="f">Owner password<input id="pw" type="password" autocomplete="current-password" required></label>
+      <label class="f">Owner password (not your sign-in password)<input id="pw" type="password" autocomplete="off" required></label>
       ${gate.locked_until ? `<p class="small" style="color:var(--bad)">Locked after too many wrong attempts until ${watTime(gate.locked_until)} WAT.</p>` : ''}
       <div class="row"><button class="btn primary" type="submit">Unlock</button><button class="btn" type="button" data-act="signout">Sign out</button></div>
-      <p class="small muted">5 wrong attempts lock owner access for 15 minutes. Every attempt is recorded with its IP address.</p></form></div>`;
+      <p class="small muted">5 wrong attempts lock owner access for 15 minutes. Every attempt is recorded with its IP address. Resetting your sign-in password by email does not change this one. If you have forgotten it, the developer can clear it from the database.</p></form></div>`;
 }
 function vSecurity() {
   return `<div class="stack"><h2>Security</h2><p class="lede">Unlocked until ${gate?.expires_at ? watTime(gate.expires_at) + ' WAT' : '—'}. The control room also locks itself after 15 minutes without activity.</p></div>
