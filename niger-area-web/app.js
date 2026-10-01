@@ -140,7 +140,7 @@ const ACT = {
     if (error) return toast(error.message, true);
     if (authMode === 'signup' && !data.session) { authMode = 'signin'; render(); toast('Check your email to confirm your account, then sign in.'); }
   },
-  async signout() { await sb.auth.signOut(); },
+  async signout() { sheet = null; await sb.auth.signOut(); toast('Signed out.'); },
   register() {
     const n = val('su-name').trim();
     if (n.length < 2) return toast('Enter your name, at least 2 letters.', true);
@@ -404,7 +404,8 @@ function badgeFor(p) {
 function nav() {
   const side = `<nav class="side" aria-label="Sections">${MAIN.map(([p, l]) => `<button data-act="go" data-a="${p}" ${page === p ? 'aria-current="page"' : ''}>${icon(ICON_FOR[p])}${l}${badgeFor(p)}</button>`).join('')}<hr>
     ${MORE.map(([p, l]) => `<button data-act="go" data-a="${p}" ${page === p ? 'aria-current="page"' : ''}>${icon(ICON_FOR[p])}${l}</button>`).join('')}<hr>
-    ${D.isAdmin ? `<button onclick="location.href='admin.html'">${icon('shield')}Owner dashboard</button>` : ''}</nav>`;
+    ${D.isAdmin ? `<button onclick="location.href='admin.html'">${icon('shield')}Owner dashboard</button>` : ''}
+    <button data-act="signout">${icon('logout')}Sign out</button></nav>`;
   const inMore = MORE.some(([p]) => p === page);
   const bottom = `<nav class="bottomnav" aria-label="Sections">${MAIN.slice(0, 4).map(([p, l]) => `<button data-act="go" data-a="${p}" ${page === p ? 'aria-current="page"' : ''}>${icon(ICON_FOR[p])}${l}${badgeFor(p)}</button>`).join('')}
     <button data-act="more" ${inMore || page === 'me' ? 'aria-current="page"' : ''}>${icon('more')}More${badgeFor('me')}</button></nav>`;
@@ -709,7 +710,7 @@ function vSheet() {
   if (sheet.type === 'more') h = `<h3>More</h3><div class="grid3" style="grid-template-columns:repeat(2,1fr)">
       ${[['me', 'Me & PVC'], ...MORE].map(([p, l]) => `<button class="btn" data-act="go" data-a="${p}" style="display:flex;gap:8px;align-items:center;justify-content:flex-start">${icon(ICON_FOR[p])}${l}${p === 'me' ? badgeFor('me') : ''}</button>`).join('')}
       ${D.isAdmin ? `<button class="btn" onclick="location.href='admin.html'" style="display:flex;gap:8px;align-items:center">${icon('shield')}Owner dashboard</button>` : ''}</div>
-      <button class="btn" data-act="close">Close</button>`;
+      <div class="row between"><button class="btn" data-act="close">Close</button><button class="btn warn" data-act="signout" style="display:flex;gap:8px;align-items:center">${icon('logout')}Sign out</button></div>`;
   else if (sheet.type === 'ad') h = `<span class="eyebrow">Sponsored</span><div class="adbox">Your brand could be here.<br>Advertise to Niger Area citizens.<br><span class="num">${sheet.left}s</span></div><p class="small muted">Stay on this screen to earn 400 coins.</p><button class="btn" data-act="close">Skip (no coins)</button>`;
   else if (sheet.type === 'profile') h = vProfile();
   else if (sheet.type === 'arrest') h = `<h3>Arrest ${esc(nm(sheet.id))}?</h3><label class="f">Charge<select id="ar-charge">${CHARGES.map(c => `<option>${c}</option>`).join('')}</select></label>
