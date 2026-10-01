@@ -1,0 +1,11 @@
+{
+  "name": "niger-area-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/db.test.mjs supabase/migrations"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8"
+  }
+}

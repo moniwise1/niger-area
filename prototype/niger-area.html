@@ -1,0 +1,619 @@
+<title>Niger Area</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: danfo-yellow status bar over a ballot-paper app shell; sections as a ticket strip of tabs */
+:root{
+  --paper:#EEF1E8; --surface:#FFFFFF; --sunk:#E3E8DC; --ink:#132019; --muted:#56675D; --line:#D0D8C8;
+  --green:#0B6B3B; --on-green:#FFFFFF; --danfo:#F4C21B; --on-danfo:#15130A;
+  --good:#1E7A45; --warn:#9A6100; --bad:#B53A22;
+  --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+  --body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0D1410; --surface:#15201A; --sunk:#1C2A22; --ink:#E6EEE4; --muted:#93A399; --line:#2A3A31;
+  --green:#2E9E63; --on-green:#07130C; --danfo:#F4C21B; --on-danfo:#15130A;
+  --good:#4CC181; --warn:#E3A83A; --bad:#EB6C52; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#0D1410; --surface:#15201A; --sunk:#1C2A22; --ink:#E6EEE4; --muted:#93A399; --line:#2A3A31;
+  --green:#2E9E63; --on-green:#07130C; --danfo:#F4C21B; --on-danfo:#15130A;
+  --good:#4CC181; --warn:#E3A83A; --bad:#EB6C52; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:0 48px}
+
+/* Top bar: the danfo */
+.bus{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--danfo);color:var(--on-danfo);
+  border-bottom:6px solid var(--on-danfo);box-shadow:0 5px 0 -1px var(--danfo) inset}
+.bus::after{content:"";display:block;height:5px;background:repeating-linear-gradient(90deg,var(--on-danfo) 0 22px,var(--danfo) 22px 30px)}
+.bus-in{max-width:1040px;margin:0 auto;padding:10px 16px 8px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.brand{font-family:var(--display);font-weight:900;font-size:30px;letter-spacing:.02em;line-height:1;text-transform:uppercase}
+.brand small{display:block;font-family:var(--body);font-weight:600;font-size:11px;letter-spacing:.14em;opacity:.75}
+.meters{display:flex;flex-wrap:wrap;gap:6px 16px;margin-left:auto;align-items:center}
+.meter{display:flex;flex-direction:column;line-height:1.1}
+.meter b{font-family:var(--mono);font-size:16px;font-variant-numeric:tabular-nums}
+.meter span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;opacity:.7}
+.endday{background:var(--on-danfo);color:var(--danfo);border:0;border-radius:4px;padding:9px 14px;font-weight:800;cursor:pointer;
+  font-family:var(--display);font-size:18px;letter-spacing:.04em;text-transform:uppercase}
+.endday:hover{filter:brightness(1.3)}
+.ticker{max-width:1040px;margin:0 auto;padding:0 16px 8px;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticker em{font-style:normal;background:var(--on-danfo);color:var(--danfo);padding:1px 6px;margin-right:8px;font-size:11px;letter-spacing:.1em;border-radius:2px}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;overflow-x:auto;padding-block:14px 4px;scrollbar-width:thin}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:3px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--danfo);outline-offset:2px}
+
+h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.02em;line-height:1.05;text-wrap:balance;margin:0}
+h2{font-size:28px;font-weight:800}
+h3{font-size:19px;font-weight:800}
+.lede{color:var(--muted);margin:4px 0 0;max-width:62ch}
+.sec{display:grid;gap:14px;margin-top:18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.grid3{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr))}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:10px;min-width:0;align-content:start}
+.panel.hero{border-color:var(--green);border-width:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.between{justify-content:space-between}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.big{font-family:var(--mono);font-size:34px;font-weight:700;line-height:1}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.btn{border:1px solid var(--ink);background:transparent;padding:7px 12px;border-radius:4px;cursor:pointer;font-weight:600;font-size:14px}
+.btn:hover:not(:disabled){background:var(--sunk)}
+.btn.primary{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.btn.primary:hover:not(:disabled){filter:brightness(1.1);background:var(--green)}
+.btn.warn{border-color:var(--bad);color:var(--bad)}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+input[type=text],input[type=number],select{border:1px solid var(--line);background:var(--paper);border-radius:4px;padding:7px 10px;min-width:0}
+label.f{display:grid;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--paper);white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.pill-good{color:var(--good);border-color:currentColor}
+.pill-warn{color:var(--warn);border-color:currentColor}
+.pill-bad{color:var(--bad);border-color:currentColor}
+
+.bar{height:8px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:4px}
+.bar.g i{background:var(--good)}.bar.w i{background:var(--warn)}.bar.b i{background:var(--bad)}
+.stat{display:grid;grid-template-columns:120px 1fr 38px;gap:10px;align-items:center;font-size:14px}
+
+.list{display:grid;gap:0}
+.li{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:9px 0;border-top:1px solid var(--line)}
+.li:first-child{border-top:0}
+.li > div{min-width:0}
+
+.action{display:grid;gap:6px;border:1px solid var(--line);border-radius:5px;padding:12px;background:var(--paper)}
+.action b{font-size:14px}
+.action p{margin:0;font-size:13px;color:var(--muted)}
+
+.ballot{display:grid;gap:8px}
+.cand{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.cand .bar{grid-column:1/-1}
+.cand.me{background:color-mix(in srgb,var(--danfo) 22%,transparent);margin-inline:-8px;padding:6px 8px;border-radius:4px}
+
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+.news .li{justify-content:flex-start;flex-wrap:nowrap;align-items:baseline}
+.news .d{font-family:var(--mono);font-size:12px;color:var(--muted);flex:none;width:56px}
+
+/* Setup */
+.setup{max-width:560px;margin:28px auto 0;display:grid;gap:16px}
+.setup h1{font-size:clamp(44px,11vw,84px);font-weight:900;line-height:.9}
+.setup .stamp{display:inline-block;background:var(--green);color:var(--on-green);font-family:var(--display);font-weight:800;padding:2px 10px;font-size:18px;text-transform:uppercase;letter-spacing:.06em}
+.feature{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:8px;font-size:13px}
+.feature div{border-left:3px solid var(--danfo);padding:2px 0 2px 10px}
+
+/* Modal */
+.scrim{position:fixed;inset:0;background:rgba(5,10,7,.55);display:grid;place-items:center;padding:16px;z-index:50}
+.modal{background:var(--surface);color:var(--ink);border-radius:8px;max-width:460px;width:100%;padding:20px;display:grid;gap:12px;border-top:8px solid var(--danfo);max-height:90vh;overflow:auto}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);
+  padding:10px 16px;border-radius:5px;font-weight:600;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
+.adbox{height:120px;border-radius:6px;display:grid;place-items:center;background:repeating-linear-gradient(135deg,var(--sunk) 0 14px,var(--paper) 14px 28px);font-weight:700}
+@media (max-width:560px){ .brand{font-size:24px} .stat{grid-template-columns:92px 1fr 34px} .big{font-size:28px} }
+@media (prefers-reduced-motion:no-preference){ .toast{animation:up .25s ease-out} @keyframes up{from{transform:translate(-50%,10px);opacity:0}} }
+</style>
+
+<div id="app"></div>
+
+<script>
+/* ============ DATA ============ */
+const STATES=[
+ {id:'lagos',name:'Lagos',lgas:['Ikeja','Surulere','Alimosho']},
+ {id:'kano',name:'Kano',lgas:['Nassarawa','Fagge','Dala']},
+ {id:'rivers',name:'Rivers',lgas:['Obio-Akpor','Port Harcourt','Bonny']},
+ {id:'enugu',name:'Enugu',lgas:['Nsukka','Enugu North','Udi']},
+ {id:'oyo',name:'Oyo',lgas:['Ibadan North','Ogbomosho','Iseyin']},
+ {id:'kaduna',name:'Kaduna',lgas:['Zaria','Kaduna South','Kafanchan']},
+ {id:'fct',name:'Abuja FCT',lgas:['AMAC','Bwari','Gwagwalada']}
+];
+const PARTIES=[
+ {id:'pbc',name:'Progressive Broom Congress',abbr:'PBC',color:'#1F8A55',members:4200000},
+ {id:'pup',name:"People's Umbrella Party",abbr:'PUP',color:'#D2412F',members:3600000},
+ {id:'lv',name:'Labour Vanguard',abbr:'LV',color:'#3478C4',members:2100000},
+ {id:'npm',name:'New Progressives Movement',abbr:'NPM',color:'#B07A18',members:1300000}
+];
+const OFF={
+ LG:{title:'LG Chairman',term:30,fee:2000,salary:300,alloc:40000,unit:6000,voters:[60000,180000],minRep:0,cap:8000,mult:1},
+ SEN:{title:'Senator',term:60,fee:5000,salary:500,alloc:60000,unit:9000,voters:[800000,2000000],minRep:8,cap:20000,mult:2},
+ GOV:{title:'Governor',term:60,fee:8000,salary:800,alloc:150000,unit:20000,voters:[1000000,3000000],minRep:15,cap:40000,mult:3},
+ PRES:{title:'President',term:120,fee:20000,salary:1500,alloc:600000,unit:90000,voters:[18000000,25000000],minRep:30,cap:120000,mult:6}
+};
+const STATS=[['roads','Roads'],['power','Power'],['health','Health'],['edu','Education'],['security','Security'],['economy','Economy']];
+const PROJECTS=[
+ {id:'road',stat:'roads',label:'Fix the roads',blurb:'Patch potholes, grade the feeder roads.',days:3},
+ {id:'power',stat:'power',label:'Install transformers',blurb:'So people can switch off their generators.',days:2},
+ {id:'health',stat:'health',label:'Equip health centres',blurb:'Drugs, beds and nurses that stay.',days:3},
+ {id:'edu',stat:'edu',label:'Renovate schools',blurb:'Roofs, desks and teachers paid on time.',days:3},
+ {id:'security',stat:'security',label:'Fund community security',blurb:'Vigilante patrols and police logistics.',days:2},
+ {id:'economy',stat:'economy',label:'Grants for traders',blurb:'Soft loans for market women and artisans.',days:2}
+];
+const CAMPAIGN=[
+ {id:'rally',label:'Hold a rally',blurb:'Canopies, a DJ and a wide stage.',cost:300,e:1,pop:[2,5]},
+ {id:'posters',label:'Posters and radio jingles',blurb:'Your face on every electric pole.',cost:600,e:1,pop:[3,6]},
+ {id:'influencers',label:'Pay influencers',blurb:'Trending by evening. Can backfire.',cost:1200,e:1,pop:[4,9],risk:true},
+ {id:'debate',label:'Televised debate',blurb:'Free, costs 2 energy. You can flop.',cost:0,e:2,pop:[-3,8],integ:2},
+ {id:'ruler',label:'Visit the traditional ruler',blurb:'Needs reputation 10 to get an audience.',cost:2000,e:1,pop:[5,9],needRep:10},
+ {id:'rice',label:'Share bags of rice',blurb:'"Stomach infrastructure". Raises scandal.',cost:2500,e:1,pop:[7,12],scandal:10},
+ {id:'buy',label:'Buy votes at polling units',blurb:'Works. EFCC is watching.',cost:5000,e:1,pop:[12,18],scandal:22,integ:-8}
+];
+const HOUSES=[['Room in a face-me-I-face-you',0],['Self-contain',3000],['2-bedroom flat',8000],['Bungalow',15000],['Duplex in Lekki',35000],['Mansion in Maitama',80000]];
+const CARS=[['Legs and danfo',0],['Okada',1500],['Keke NAPEP',3500],['Tokunbo Corolla',9000],['Prado jeep',25000],['G-Wagon convoy',60000]];
+const BIZ=[{id:'pos',label:'POS stand',cost:2000,inc:60,inf:1},{id:'shop',label:'Provision shop',cost:6000,inc:180,inf:2},{id:'station',label:'Filling station',cost:25000,inc:700,inf:5}];
+const EVENTS=[
+ {t:'Fuel scarcity grips Niger Area. Queues stretch for kilometres.',eff:{economy:-4},scope:'all'},
+ {t:'The national grid collapses again.',eff:{power:-6},scope:'all'},
+ {t:'ASUU declares an indefinite strike.',eff:{edu:-6},scope:'all'},
+ {t:'Flooding sweeps through {s}.',eff:{roads:-8,economy:-3},scope:'state'},
+ {t:'Kidnappers strike on the {s} highway.',eff:{security:-8},scope:'state'},
+ {t:'The naira slides at the parallel market.',eff:{economy:-3},scope:'all'},
+ {t:'Cholera outbreak reported in {s}.',eff:{health:-7},scope:'state'},
+ {t:'Bumper harvest lifts markets across {s}.',eff:{economy:5},scope:'state'},
+ {t:'Oil prices rise. Next federal allocation will be bigger.',eff:{},scope:'all',alloc:1.25}
+];
+const FIRST=['Chinedu','Aisha','Tunde','Ngozi','Ibrahim','Funmi','Emeka','Hauwa','Segun','Amaka','Musa','Bola','Obinna','Zainab','Kunle','Ifeoma','Yakubu','Titi','Nnamdi','Halima','Dapo','Adaeze','Sani','Kemi','Tamuno','Ebi'];
+const LAST=['Okafor','Bello','Adeyemi','Nwosu','Abubakar','Ogunleye','Eze','Danjuma','Balogun','Okonkwo','Yusuf','Adebayo','Obi','Lawal','Uche','Garba','Akande','Ibe','Briggs','Amadi'];
+const HONS=['Chief','Alhaji','Hon.','Dr.','Barr.','Otunba','Mallam','Engr.'];
+
+/* ============ HELPERS ============ */
+const R=(a,b)=>a+Math.random()*(b-a), RI=(a,b)=>Math.floor(R(a,b+1)), pick=a=>a[Math.floor(Math.random()*a.length)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), fmt=n=>Math.round(n).toLocaleString('en-NG');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const person=()=>pick(FIRST)+' '+pick(LAST), politician=()=>pick(HONS)+' '+person();
+const st=id=>STATES.find(s=>s.id===id);
+const typeOf=k=>k.split(':')[0];
+function allKeys(){const k=['PRES'];STATES.forEach(s=>{k.push('SEN:'+s.id);if(s.id!=='fct')k.push('GOV:'+s.id);s.lgas.forEach((_,i)=>k.push('LG:'+s.id+':'+i));});return k;}
+function place(k){const [t,s,l]=k.split(':');if(t==='PRES')return 'Niger Area';const x=st(s);return t==='LG'?x.lgas[+l]+' LGA':x.name+(t==='SEN'?' District':' State');}
+function officeName(k){return OFF[typeOf(k)].title+(typeOf(k)==='PRES'?' of Niger Area':', '+place(k));}
+function party(id){return S.parties.find(p=>p.id===id);}
+function strength(id){const t=S.parties.reduce((a,p)=>a+p.members,0);const p=party(id);return p?p.members/t*100:0;}
+function chip(id){const p=party(id);if(!p)return '<span class="chip">Independent</span>';return `<span class="chip"><span class="dot" style="background:${p.color}"></span>${esc(p.abbr)}</span>`;}
+function approval(k){const j=S.jur[k];const b=STATS.reduce((a,[s])=>a+j[s],0)/STATS.length;return clamp(Math.round(b+j.mood),0,100);}
+function tone(v){return v>=60?'g':v>=35?'w':'b';}
+function bar(v){return `<div class="bar ${tone(v)}"><i style="width:${clamp(v,0,100)}%"></i></div>`;}
+const STATUS_CAP=20;
+function statusRaw(){const p=S.player;return p.house*4+p.car*3+(p.gen?2:0)+(p.borehole?2:0)+(p.spouse?3:0)+p.kids+p.biz.pos*1+p.biz.shop*2+p.biz.station*5+(p.partyRole==='chair'?5:0)+p.giftInf;}
+function status(){return Math.min(STATUS_CAP,Math.floor(statusRaw()));}
+function repu(){return Math.floor(S.player.rep);}
+function influence(){return status()+repu()+S.player.officesHeld*6;}
+function addRep(d){S.player.rep=Math.max(0,S.player.rep+d);}
+function migrate(p){p.rep??=0;p.cp??=0;p.sentDay??=0;p.sentToday??=0;p.redeemLog??=[];return p;}
+function news(t){S.news.unshift({d:S.day,t});S.news.length=Math.min(S.news.length,60);}
+function myKeys(){const p=S.player;const k=['PRES','SEN:'+p.stateId];if(p.stateId!=='fct')k.push('GOV:'+p.stateId);k.push('LG:'+p.stateId+':'+p.lga);return k.reverse();}
+
+/* ============ STATE ============ */
+let S=null, UI={tab:'wallet',modal:null,adTimer:null,toast:null};
+const KEY='nigerArea.v1';
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));return s&&s.player?s:null;}catch(e){return null;}}
+
+function weightedParty(){const t=S.parties.reduce((a,p)=>a+(p.isPlayer?0:p.members),0);let r=Math.random()*t;for(const p of S.parties){if(p.isPlayer)continue;r-=p.members;if(r<=0)return p.id;}return S.parties[0].id;}
+function makeElection(k,day){
+  const inc=S.offices[k];const cands=[];
+  if(inc&&!inc.isPlayer&&Math.random()<0.6)cands.push({name:inc.name,partyId:inc.partyId,pop:R(30,50)});
+  const used=new Set(cands.map(c=>c.partyId));
+  const pool=S.parties.filter(p=>!p.isPlayer&&!used.has(p.id)).sort(()=>Math.random()-.5);
+  while(cands.length<3&&pool.length){const p=pool.shift();cands.push({name:politician(),partyId:p.id,pop:R(18,42)});}
+  S.elections[k]={day,cands};
+}
+function newGame(name,stateId,lga){
+  S={v:1,day:1,allocBoost:1,rate:250,inecChair:'Prof. '+person(),
+    player:{name,stateId,lga:+lga,coins:1500,stash:0,energy:6,integrity:50,scandal:0,partyId:null,partyRole:null,office:null,race:null,inec:false,
+      claimedDay:0,adsDay:0,adsCount:0,house:0,car:0,gen:false,borehole:false,spouse:false,kids:0,biz:{pos:0,shop:0,station:0},giftInf:0,officesHeld:0,sent:0,rep:0,cp:0,sentDay:0,sentToday:0,redeemLog:[]},
+    parties:PARTIES.map(p=>({...p})),npcs:[],offices:{},elections:{},jur:{},projects:[],news:[],results:[],pending:[],lastSalary:{}};
+  for(let i=0;i<30;i++)S.npcs.push({id:'n'+i,name:person(),coins:RI(2000,90000),partyId:weightedParty(),stateId:pick(STATES).id});
+  const range={LG:[6,20],SEN:[12,40],GOV:[18,55],PRES:[45,45]};
+  allKeys().forEach(k=>{
+    const t=typeOf(k);const j={mood:0,treasury:Math.round(OFF[t].alloc*R(.3,.8)),debt:0};
+    STATS.forEach(([s])=>j[s]=RI(22,58));S.jur[k]=j;
+    S.offices[k]={name:politician(),partyId:weightedParty(),isPlayer:false,until:RI(...range[t])};
+  });
+  S.offices['LG:'+stateId+':'+lga].until=7;
+  allKeys().forEach(k=>makeElection(k,S.offices[k].until));
+  news(`Welcome to Niger Area, ${name}. You are a registered citizen of ${st(stateId).lgas[lga]}, ${st(stateId).name}.`);
+  news(`INEC fixes the ${place('LG:'+stateId+':'+lga)} chairmanship election for Day 7.`);
+}
+
+/* ============ SIMULATION ============ */
+function applyEff(keys,eff){keys.forEach(k=>{const j=S.jur[k];for(const s in eff)j[s]=clamp(j[s]+eff[s],0,100);});}
+function stateKeys(sid){return allKeys().filter(k=>k.split(':')[1]===sid);}
+
+function installPlayer(k){
+  const p=S.player;
+  if(p.office&&p.office!==k){S.offices[p.office]={name:politician(),partyId:p.partyId,isPlayer:false,until:S.offices[p.office].until};news(`Your deputy is sworn in as ${officeName(p.office)}.`);}
+  S.offices[k]={name:p.name,partyId:p.partyId,isPlayer:true,until:S.day+OFF[typeOf(k)].term};
+  p.office=k;p.officesHeld++;addRep(8);p.cp+=500;S.lastSalary[k]=S.day;S.jur[k].mood=10;
+  if(p.partyId)party(p.partyId).members+=OFF[typeOf(k)].mult*150000;
+  makeElection(k,S.day+OFF[typeOf(k)].term);
+}
+function resolveElection(k){
+  const e=S.elections[k],t=typeOf(k),p=S.player;
+  const turnout=Math.round(R(...OFF[t].voters)*R(.28,.42));
+  const w=e.cands.map(c=>Math.max(1,c.pop+strength(c.partyId)*(t==='PRES'?.6:.35)+R(0,14)+(c.rigged?18:0)));
+  const sum=w.reduce((a,b)=>a+b,0);
+  const rows=e.cands.map((c,i)=>({name:c.name,partyId:c.partyId,isPlayer:!!c.isPlayer,votes:Math.round(w[i]/sum*turnout)})).sort((a,b)=>b.votes-a.votes);
+  const win=rows[0];const wasMine=p.office===k;
+  S.results.unshift({day:S.day,k,rows,turnout});S.results.length=Math.min(S.results.length,30);
+  news(`INEC declares ${win.name} (${party(win.partyId)?.abbr||'IND'}) winner of the ${officeName(k)} election with ${fmt(win.votes)} votes.`);
+  if(win.isPlayer){installPlayer(k);}
+  else{
+    S.offices[k]={name:win.name,partyId:win.partyId,isPlayer:false,until:S.day+OFF[t].term};
+    const wp=party(win.partyId);if(wp)wp.members+=OFF[t].mult*60000;
+    if(wasMine){p.office=null;news(`You hand over as ${officeName(k)}.`);}
+    if(t==='PRES'){if(Math.random()<.5){if(p.inec){p.inec=false;news('The new President relieves you of your appointment as INEC Chairman.');}S.inecChair='Prof. '+person();}}
+    makeElection(k,S.day+OFF[t].term);
+  }
+  const mine=rows.find(r=>r.isPlayer);
+  if(mine){p.race=null;const margin=(win.votes-mine.votes)/turnout;
+    S.pending.push({type:'result',k,rows,won:win.isPlayer});
+    if(!win.isPlayer&&margin<.1)S.pending.push({type:'tribunal',k,margin,winner:win.name});}
+}
+function endDay(){
+  const p=S.player;S.day++;p.energy=6;addRep(0.2);if(p.office&&approval(p.office)>=60){p.cp+=50;addRep(0.3);}
+  const biz=BIZ.reduce((a,b)=>a+p.biz[b.id]*b.inc,0);p.coins+=biz;
+  if(p.office)p.coins+=OFF[typeOf(p.office)].salary;
+  if(p.inec)p.coins+=600;
+  // projects
+  S.projects.forEach(pr=>{pr.left--;if(pr.left<=0){const j=S.jur[pr.k];j[pr.stat]=clamp(j[pr.stat]+pr.gain,0,100);j.mood+=3;if(S.offices[pr.k].isPlayer)addRep(.3);news(`Commissioned: ${pr.label} in ${place(pr.k)}.`);}});
+  S.projects=S.projects.filter(pr=>pr.left>0);
+  // decay and NPC governance
+  allKeys().forEach(k=>{const j=S.jur[k];j.mood*=0.9;STATS.forEach(([s])=>j[s]=clamp(j[s]-0.3,0,100));
+    if(!S.offices[k].isPlayer&&Math.random()<.35){const [s]=pick(STATS);j[s]=clamp(j[s]+RI(2,5),0,100);}});
+  // monthly allocation
+  if(S.day%30===0){allKeys().forEach(k=>{S.jur[k].treasury+=Math.round(OFF[typeOf(k)].alloc*S.allocBoost);});S.allocBoost=1;
+    news('FAAC shares the monthly federation allocation.');
+    if(p.office&&S.day-(S.lastSalary[p.office]||0)>30){S.jur[p.office].mood-=15;news(`Workers in ${place(p.office)} protest unpaid salaries.`);}}
+  // rivals and party growth
+  Object.entries(S.elections).forEach(([k,e])=>e.cands.forEach(c=>{if(c.isPlayer){if(p.office===k)c.pop=clamp(c.pop+(approval(k)-50)/40,0,100);}else c.pop=clamp(c.pop+R(0,1.6),0,100);}));
+  const mp=party('my');if(mp)mp.members+=Math.round(influence()*R(40,120));
+  S.npcs.forEach(n=>n.coins=Math.max(0,Math.round(n.coins*R(.97,1.05)+RI(0,600))));
+  // random event
+  if(Math.random()<.3){const ev=pick(EVENTS);const s=pick(STATES);news(ev.t.replace('{s}',s.name));
+    applyEff(ev.scope==='all'?allKeys():stateKeys(s.id),ev.eff);if(ev.alloc)S.allocBoost=ev.alloc;}
+  // INEC bribe offers
+  if(p.inec){Object.entries(S.elections).forEach(([k,e])=>{if(e.day===S.day+1&&typeOf(k)!=='LG'&&Math.random()<.7){const c=pick(e.cands.filter(c=>!c.isPlayer));if(c)S.pending.push({type:'bribe',k,partyId:c.partyId,amount:OFF[typeOf(k)].fee*3});}});}
+  // elections
+  Object.keys(S.elections).forEach(k=>{if(S.elections[k].day===S.day)resolveElection(k);});
+  // EFCC
+  if(p.scandal>40&&Math.random()<(p.scandal-40)/180){
+    const loss=Math.round(p.coins*.3),sl=Math.round(p.stash*.5);p.coins-=loss;p.stash-=sl;
+    let extra='';
+    if(p.office){const k=p.office;S.offices[k]={name:politician(),partyId:p.partyId,isPlayer:false,until:S.offices[k].until};p.office=null;extra=' You are removed from office.';}
+    if(p.race){const e=S.elections[p.race];e.cands=e.cands.filter(c=>!c.isPlayer);p.race=null;extra+=' INEC disqualifies your candidacy.';}
+    news(`EFCC operatives raid the home of ${p.name}.`);
+    S.pending.push({type:'efcc',text:`EFCC seizes ${fmt(loss+sl)} coins.${extra}`});p.scandal=15;p.integrity=clamp(p.integrity-10,0,100);p.rep*=0.5;
+  }
+  p.scandal=clamp(p.scandal-0.5,0,100);
+  save();render();
+}
+
+/* ============ ACTIONS ============ */
+function toast(m){UI.toast=m;renderToast();clearTimeout(UI.tt);UI.tt=setTimeout(()=>{UI.toast=null;renderToast();},2600);}
+function spend(field,amt){const p=S.player;if(p[field]<amt){toast(field==='stash'?'Not enough coins in your campaign stash.':'Not enough coins in your wallet.');return false;}p[field]-=amt;return true;}
+const GIFT_CAP=2000,REDEEM_WEEK=2500;
+const val=id=>{const el=document.getElementById(id);return el?el.value:'';};
+
+const ACT={
+  start(){const n=val('su-name').trim()||'Citizen '+pick(LAST);newGame(n.slice(0,40),val('su-state'),val('su-lga'));save();render();},
+  tab(a){UI.tab=a;render();},
+  endday(){endDay();},
+  claim(){const p=S.player;if(p.claimedDay===S.day)return;p.claimedDay=S.day;p.coins+=1000;p.cp+=20;toast('+1,000 coins and 20 civic points. Come back tomorrow.');save();render();},
+  ad(){const p=S.player;if(p.adsDay!==S.day){p.adsDay=S.day;p.adsCount=0;}if(p.adsCount>=5)return;UI.modal={type:'ad',left:4};render();
+    UI.adTimer=setInterval(()=>{UI.modal.left--;if(UI.modal.left<=0){clearInterval(UI.adTimer);p.adsCount++;p.coins+=200;UI.modal=null;toast('+200 coins for watching.');save();}render();},1000);},
+  tostash(){const a=Math.floor(+val('amt-stash'));if(!(a>0))return toast('Enter an amount.');if(spend('coins',a)){S.player.stash+=a;toast(`${fmt(a)} coins moved to your campaign stash.`);save();render();}},
+  fromstash(){const a=Math.floor(+val('amt-stash'));if(!(a>0))return toast('Enter an amount.');if(spend('stash',a)){S.player.coins+=Math.floor(a*.9);toast(`Withdrawn with a 10% party levy.`);save();render();}},
+  send(){const a=Math.floor(+val('amt-send')),n=S.npcs.find(x=>x.id===val('to-send'));if(!(a>0)||!n)return toast('Pick a friend and an amount.');
+    const p=S.player;if(p.sentDay!==S.day){p.sentDay=S.day;p.sentToday=0;}if(p.sentToday+a>GIFT_CAP)return toast(`You can send at most ${fmt(GIFT_CAP)} coins a day. ${fmt(GIFT_CAP-p.sentToday)} left today.`);
+    if(spend('coins',a)){p.sentToday+=a;n.coins+=a;S.player.giftInf+=a/1500;S.player.sent+=a;toast(`Sent ${fmt(a)} coins to ${n.name}.`);save();render();}},
+  redeem(cp){const p=S.player;cp=+cp;const used=p.redeemLog.filter(r=>S.day-r.d<7).reduce((a,r)=>a+r.cp,0);if(used+cp>REDEEM_WEEK)return toast(`Weekly limit is ${fmt(REDEEM_WEEK)} points. ${fmt(REDEEM_WEEK-used)} left this week.`);
+    if(p.cp<cp)return toast('Not enough civic points.');p.cp-=cp;p.redeemLog.push({d:S.day,cp});p.redeemLog=p.redeemLog.filter(r=>S.day-r.d<7);toast(`Demo: ₦${fmt(cp/5)} airtime voucher issued.`);save();render();},
+  topup(){UI.modal={type:'topup'};render();},
+  pack(a){S.player.coins+=+a;UI.modal=null;toast(`Demo top-up: +${fmt(+a)} coins.`);save();render();},
+  close(){if(UI.adTimer)clearInterval(UI.adTimer);UI.modal=null;render();},
+  house(){const p=S.player;const n=HOUSES[p.house+1];if(n&&spend('coins',n[1])){p.house++;news(`${p.name} moves into a ${n[0].toLowerCase()}.`);save();render();}},
+  car(){const p=S.player;const n=CARS[p.car+1];if(n&&spend('coins',n[1])){p.car++;toast(`New ride: ${n[0]}.`);save();render();}},
+  gen(){if(!S.player.gen&&spend('coins',1500)){S.player.gen=true;toast('Generator installed. Your neighbours can hear it.');save();render();}},
+  borehole(){if(!S.player.borehole&&spend('coins',2500)){S.player.borehole=true;toast('Borehole sunk. The whole street fetches from you now.');save();render();}},
+  marry(){if(!S.player.spouse&&spend('coins',6000)){S.player.spouse=true;news(`${S.player.name} weds in a colourful ceremony. Aso-ebi everywhere.`);save();render();}},
+  child(){const p=S.player;if(p.spouse&&p.kids<6&&spend('coins',2000)){p.kids++;toast('Naming ceremony held. Congratulations.');save();render();}},
+  biz(id){const b=BIZ.find(x=>x.id===id);const p=S.player;if(p.biz[id]<5&&spend('coins',b.cost)){p.biz[id]++;toast(`${b.label} opened. +${b.inc} coins per day.`);save();render();}},
+  join(id){const p=S.player;if(p.inec)return toast('INEC officials cannot join parties.');if(spend('coins',200)){p.partyId=id;p.partyRole='member';party(id).members++;news(`${p.name} joins the ${party(id).name}.`);save();render();}},
+  decamp(){const p=S.player;if(p.partyRole==='chair')return;if(p.race){const e=S.elections[p.race];e.cands=e.cands.filter(c=>!c.isPlayer);p.race=null;}
+    news(`${p.name} decamps from the ${party(p.partyId).abbr}.`);p.partyId=null;p.partyRole=null;save();render();},
+  create(){const p=S.player;const name=val('np-name').trim(),abbr=val('np-abbr').trim().toUpperCase();
+    if(!name||!abbr)return toast('Give your party a name and an abbreviation.');if(p.partyId)return toast('Decamp from your current party first.');if(p.inec)return toast('INEC officials cannot form parties.');
+    if(spend('coins',5000)){S.parties=S.parties.filter(x=>x.id!=='my');S.parties.push({id:'my',name:name.slice(0,40),abbr:abbr.slice(0,6),color:val('np-color')||'#6B3FA0',members:500,isPlayer:true});
+      p.partyId='my';p.partyRole='chair';news(`INEC registers a new party: the ${name} (${abbr}), led by ${p.name}.`);save();render();}},
+  dissolve(){const p=S.player;if(p.race||p.office)return toast('You cannot dissolve the party while running or in office.');S.parties=S.parties.filter(x=>x.id!=='my');p.partyId=null;p.partyRole=null;news(`${p.name} dissolves their party.`);save();render();},
+  mobilize(){if(spend('coins',2000)){const n=RI(40000,120000);party('my').members+=n;toast(`${fmt(n)} new members registered at ward level.`);save();render();}},
+  convention(){if(spend('coins',8000)){const n=RI(200000,450000);party('my').members+=n;S.player.giftInf+=2;news(`${party('my').abbr} holds a national convention. ${fmt(n)} new members.`);save();render();}},
+  volunteer(){const p=S.player;if(p.energy<1)return toast('No energy left today.');p.energy--;addRep(.5);party(p.partyId).members+=RI(200,900);toast('You canvassed your ward. Reputation +0.5.');save();render();},
+  declare(k){const p=S.player,t=typeOf(k),e=S.elections[k];
+    if(!p.partyId)return toast('You need a party ticket first.');if(p.race)return toast('You are already running in another race.');if(repu()<OFF[t].minRep)return toast(`You need reputation ${OFF[t].minRep} to run for ${OFF[t].title}.`);
+    if(spend('stash',OFF[t].fee)){const had=e.cands.some(c=>c.partyId===p.partyId);e.cands=e.cands.filter(c=>c.partyId!==p.partyId);
+      e.cands.push({name:p.name,partyId:p.partyId,isPlayer:true,pop:8+influence()*.6+(p.office===k?approval(k)*.4:0)});p.race=k;
+      news(had?`${p.name} wins the ${party(p.partyId).abbr} primary for ${officeName(k)}.`:`${p.name} picks the ${party(p.partyId).abbr} ticket for ${officeName(k)}.`);save();render();}},
+  camp(id){const p=S.player,c=CAMPAIGN.find(x=>x.id===id),m=OFF[typeOf(p.race)].mult,me=S.elections[p.race].cands.find(x=>x.isPlayer);
+    const el=S.elections[p.race],cap=OFF[typeOf(p.race)].cap,cost=c.cost*m;el.spent??=0;
+    if(p.energy<c.e)return toast('No energy left today. End the day to rest.');if(c.needRep&&repu()<c.needRep)return toast('The palace says come back when you are better known.');
+    if(el.spent+cost>cap)return toast(`That would break the ${fmt(cap)}-coin spending limit for this race.`);
+    if(!spend('stash',cost))return;el.spent+=cost;if(c.id==='debate')addRep(1);p.energy-=c.e;let d=R(...c.pop);if(c.risk&&Math.random()<.2){d=-4;toast('Backlash! An old tweet resurfaces.');}else toast(`${d>=0?'+':''}${d.toFixed(1)} popularity.`);
+    me.pop=clamp(me.pop+d,0,100);if(c.scandal)p.scandal+=c.scandal;if(c.integ)p.integrity=clamp(p.integrity+c.integ,0,100);save();render();},
+  withdraw(){const p=S.player;const e=S.elections[p.race];e.cands=e.cands.filter(c=>!c.isPlayer);news(`${p.name} withdraws from the ${officeName(p.race)} race.`);p.race=null;save();render();},
+  project(id){const p=S.player,k=p.office,pr=PROJECTS.find(x=>x.id===id),cost=OFF[typeOf(k)].unit,j=S.jur[k];
+    if(p.energy<1)return toast('No energy left today.');if(j.treasury<cost)return toast('The treasury is empty. Wait for FAAC or borrow.');
+    j.treasury-=cost;p.energy--;S.projects.push({k,stat:pr.stat,label:pr.label,left:pr.days,gain:RI(9,14)});toast(`Contract awarded. Ready in ${pr.days} days.`);save();render();},
+  townhall(){const p=S.player;if(p.energy<1)return toast('No energy left today.');p.energy--;const d=RI(2,7);S.jur[p.office].mood+=d;addRep(.5);toast(`Town hall went well. Rapport +${d}.`);save();render();},
+  salaries(){const p=S.player,k=p.office,c=Math.round(OFF[typeOf(k)].unit*.8),j=S.jur[k];if(j.treasury<c)return toast('Not enough in the treasury for salaries.');
+    j.treasury-=c;S.lastSalary[k]=S.day;j.mood+=8;toast('Salaries paid. Workers are singing your name.');save();render();},
+  bill(){const p=S.player;if(p.energy<2)return toast('Sponsoring a bill takes 2 energy.');p.energy-=2;p.integrity=clamp(p.integrity+3,0,100);S.jur[p.office].mood+=3;news(`Senator ${p.name} sponsors a bill that passes second reading.`);save();render();},
+  loot(){const p=S.player,j=S.jur[p.office],a=Math.round(j.treasury*.2);if(a<1)return;j.treasury-=a;p.coins+=a;p.scandal+=25;addRep(-3);p.integrity=clamp(p.integrity-12,0,100);
+    if(Math.random()<.4){j.mood-=10;news(`Sahara Reporters: ${fmt(a)} coins missing from the ${place(p.office)} treasury.`);}toast(`${fmt(a)} coins "diverted". EFCC may notice.`);save();render();},
+  visit(){const j=S.jur.PRES,c=30000;if(S.player.energy<1)return toast('No energy left today.');if(j.treasury<c)return toast('Not enough in the treasury.');j.treasury-=c;S.player.energy--;
+    const good=Math.random()<.6;if(good){applyEff(allKeys(),{economy:3});news(`President ${S.player.name} signs a trade deal on a state visit abroad.`);}else{j.mood-=4;news(`Critics slam the President's latest foreign trip as a jamboree.`);}save();render();},
+  loan(){const j=S.jur.PRES;j.treasury+=300000;j.debt+=360000;j.mood-=4;news('The Senate approves a new foreign loan request.');save();render();},
+  summit(){const j=S.jur.PRES;if(S.player.energy<2)return toast('Hosting a summit takes 2 energy.');if(j.treasury<50000)return toast('Not enough in the treasury.');j.treasury-=50000;S.player.energy-=2;addRep(3);j.mood+=3;news('Niger Area hosts the ECOWAS summit in Abuja.');save();render();},
+  appoint(){const n='Prof. '+person();S.inecChair=n;news(`President ${S.player.name} appoints ${n} as INEC Chairman.`);save();render();},
+  lobby(){const p=S.player;if(p.office||p.race)return toast('Resign your office or candidacy first.');if(p.partyRole==='chair')return toast('Party chairmen cannot head INEC.');
+    if(repu()<12||p.integrity<40)return toast('You need reputation 12 and integrity 40.');if(!spend('coins',3000))return;
+    if(Math.random()<.4){if(p.partyId){p.partyId=null;p.partyRole=null;}p.inec=true;S.inecChair=p.name;news(`The President appoints ${p.name} as INEC Chairman.`);}else toast('The Presidency picked someone else. Try again later.');save();render();},
+  resigninec(){S.player.inec=false;S.inecChair='Prof. '+person();news(`${S.player.name} resigns as INEC Chairman.`);save();render();},
+  bribe(ok){const b=S.pending.shift(),p=S.player;if(ok){p.coins+=b.amount;p.scandal+=30;addRep(-5);p.integrity=clamp(p.integrity-15,0,100);const c=S.elections[b.k]?.cands.find(c=>c.partyId===b.partyId);if(c)c.rigged=true;}
+    else{p.integrity=clamp(p.integrity+8,0,100);news(`INEC Chairman ${p.name} vows free and fair elections.`);}save();render();},
+  tribunal(go){const t=S.pending.shift(),p=S.player;if(go){if(!spend('coins',2000)){S.pending.unshift(t);return;}
+      if(Math.random()<.45-t.margin*3){installPlayer(t.k);news(`Tribunal sacks ${t.winner}, declares ${p.name} winner of the ${officeName(t.k)} election.`);S.pending.unshift({type:'efcc',text:'The tribunal ruled in your favour. You are sworn in.'});}
+      else news(`Tribunal upholds the victory of ${t.winner}.`);}save();render();},
+  ack(){S.pending.shift();save();render();},
+  reset(){UI.modal={type:'reset'};render();},
+  doreset(){try{localStorage.removeItem(KEY);}catch(e){}S=null;UI={tab:'wallet',modal:null};render();}
+};
+
+/* ============ VIEWS ============ */
+function top(){
+  const p=S.player;const n=S.news[0];
+  return `<header class="bus"><div class="bus-in">
+    <div class="brand">Niger Area<small>Day ${S.day} · ${esc(place('LG:'+p.stateId+':'+p.lga))}</small></div>
+    <div class="meters">
+      <div class="meter"><b>${fmt(p.coins)}</b><span>Wallet</span></div>
+      <div class="meter"><b>${fmt(p.stash)}</b><span>Stash</span></div>
+      <div class="meter"><b>${p.energy}/6</b><span>Energy</span></div>
+      <div class="meter"><b>${repu()}</b><span>Reputation</span></div>
+      <button class="endday" data-act="endday">End day ›</button>
+    </div></div>
+    <div class="ticker"><em>NEWS</em>${n?esc(n.t):''}</div></header>`;
+}
+const TABS=[['wallet','Wallet'],['home','Household'],['party','Party'],['campaign','Elections'],['office','Office'],['nation','Nation'],['news','News']];
+function tabs(){return `<nav class="tabs" role="tablist">${TABS.map(([id,l])=>`<button class="tab" role="tab" aria-selected="${UI.tab===id}" data-act="tab" data-a="${id}">${l}${id==='office'&&S.player.office?' ●':''}</button>`).join('')}</nav>`;}
+
+function vWallet(){
+  const p=S.player;if(p.adsDay!==S.day){p.adsDay=S.day;p.adsCount=0;}
+  const claimed=p.claimedDay===S.day;
+  const board=[...S.npcs.map(n=>({name:n.name,coins:n.coins,partyId:n.partyId})),{name:p.name,coins:p.coins+p.stash,partyId:p.partyId,me:1}].sort((a,b)=>b.coins-a.coins);
+  const rank=board.findIndex(x=>x.me)+1;
+  return `<div class="sec"><div><h2>Wallet</h2><p class="lede">Earn coins every day, stash them for politics, trade them or send them to friends.</p></div>
+  <div class="grid">
+    <div class="panel hero"><span class="eyebrow">Wallet balance</span><div class="big">${fmt(p.coins)}<span class="small muted"> coins</span></div>
+      <div class="small muted">Rank #${rank} of ${board.length} · Coins are for playing and can't be cashed out</div>
+      <div class="row"><button class="btn primary" data-act="claim" ${claimed?'disabled':''}>${claimed?'Daily 1,000 claimed':'Claim daily 1,000'}</button>
+      <button class="btn" data-act="ad" ${p.adsCount>=5?'disabled':''}>Watch ad +200 (${5-p.adsCount} left)</button>
+      <button class="btn" data-act="topup">Top up</button></div>
+      <div class="small muted">Daily bonus plus ads caps free earnings at 2,000 coins a day.</div></div>
+    <div class="panel"><span class="eyebrow">Campaign stash</span><div class="big">${fmt(p.stash)}</div>
+      <p class="small muted" style="margin:0">Nomination fees and campaign spending come from here. Withdrawing back costs a 10% party levy.</p>
+      <div class="row"><input id="amt-stash" type="number" min="1" placeholder="Amount" style="width:120px"><button class="btn primary" data-act="tostash">Stash</button><button class="btn" data-act="fromstash">Withdraw</button></div></div>
+    <div class="panel"><span class="eyebrow">Send to a friend</span>
+      <div class="row"><select id="to-send" style="flex:1">${S.npcs.slice(0,14).map(n=>`<option value="${n.id}">${esc(n.name)} · ${esc(st(n.stateId).name)}</option>`).join('')}</select></div>
+      <div class="row"><input id="amt-send" type="number" min="1" placeholder="Amount" style="width:120px"><button class="btn primary" data-act="send">Send</button></div>
+      <div class="small muted">Limit ${fmt(GIFT_CAP)} coins a day, ${fmt(GIFT_CAP-(p.sentDay===S.day?p.sentToday:0))} left today. Gifts raise your status, which is capped at ${STATUS_CAP}.</div></div>
+    <div class="panel"><span class="eyebrow">Civic points</span><div class="big">${fmt(p.cp)}</div>
+      <p class="small muted" style="margin:0">Earned only by playing: daily check-ins, winning office, and governing with approval of 60% or more. Buying coins never earns points.</p>
+      <div class="list">${[[500,100],[2000,400]].map(([c,n])=>`<div class="li"><div class="small">₦${n} airtime <span class="muted num">· ${fmt(c)} pts</span></div><button class="btn" data-act="redeem" data-a="${c}" ${p.cp<c?'disabled':''}>Redeem</button></div>`).join('')}</div>
+      <div class="small muted">Limit ${fmt(REDEEM_WEEK)} points a week. Prototype: vouchers are simulated.</div></div>
+  </div>
+  <div class="panel"><div class="row between"><h3>Richest citizens</h3><span class="small muted">wallet + stash</span></div>
+    <div class="list">${board.slice(0,8).map((b,i)=>`<div class="li"${b.me?' style="font-weight:700"':''}><div>${i+1}. ${esc(b.name)}${b.me?' (you)':''} ${chip(b.partyId)}</div><div class="num">${fmt(b.coins)}</div></div>`).join('')}</div></div>
+  <div class="row small muted"><span>Status ${status()}/${STATUS_CAP} (bought)</span>·<span>Reputation ${repu()} (earned)</span>·<span>Integrity ${Math.round(p.integrity)}</span>·<span>Scandal ${Math.round(p.scandal)}${p.scandal>40?' (EFCC has opened a file)':''}</span>·<button class="btn" data-act="reset" style="margin-left:auto">Start over</button></div>
+  </div>`;
+}
+function vHome(){
+  const p=S.player;const nh=HOUSES[p.house+1],nc=CARS[p.car+1];
+  const it=(t,d,btn)=>`<div class="action"><b>${t}</b><p>${d}</p><div>${btn}</div></div>`;
+  return `<div class="sec"><div><h2>Household</h2><p class="lede">Your home, your ride and your family raise your status, up to ${STATUS_CAP}. Past that, only reputation earned in public life counts. Businesses pay you every day.</p></div>
+  <div class="grid">
+    <div class="panel"><span class="eyebrow">Where you live</span><h3>${HOUSES[p.house][0]}</h3><div class="small muted">Status ${status()}/${STATUS_CAP}${statusRaw()>STATUS_CAP?' · maxed':''}</div>${bar(p.house/5*100)}
+      ${nh?`<button class="btn primary" data-act="house">Move to ${nh[0]} · ${fmt(nh[1])}</button>`:'<span class="small muted">You live in the finest house in Niger Area.</span>'}</div>
+    <div class="panel"><span class="eyebrow">How you move</span><h3>${CARS[p.car][0]}</h3>${bar(p.car/5*100)}
+      ${nc?`<button class="btn primary" data-act="car">Upgrade to ${nc[0]} · ${fmt(nc[1])}</button>`:'<span class="small muted">Siren and outriders included.</span>'}</div>
+  </div>
+  <div class="grid3">
+    ${it('Generator',p.gen?'Installed. You have light when NEPA takes it.':'Because the grid will fail you.',p.gen?'<span class="chip pill-good">Owned</span>':'<button class="btn" data-act="gen">Buy · 1,500</button>')}
+    ${it('Borehole',p.borehole?'Your compound has water. So does half the street.':'Stop buying jerrycans.',p.borehole?'<span class="chip pill-good">Owned</span>':'<button class="btn" data-act="borehole">Sink · 2,500</button>')}
+    ${it('Marriage',p.spouse?'Happily married.':'A proper traditional wedding with aso-ebi.',p.spouse?'<span class="chip pill-good">Married</span>':'<button class="btn" data-act="marry">Wed · 6,000</button>')}
+    ${it(`Children (${p.kids})`,p.spouse?'Each naming ceremony adds to your standing.':'Get married first.',`<button class="btn" data-act="child" ${!p.spouse||p.kids>=6?'disabled':''}>Naming ceremony · 2,000</button>`)}
+  </div>
+  <div class="panel"><h3>Businesses</h3><div class="grid3">
+    ${BIZ.map(b=>it(`${b.label} × ${p.biz[b.id]}`,`+${b.inc} coins a day · +${b.inf} influence each`,`<button class="btn primary" data-act="biz" data-a="${b.id}" ${p.biz[b.id]>=5?'disabled':''}>Open · ${fmt(b.cost)}</button>`)).join('')}
+  </div><div class="small muted">Daily business income: <span class="num">${fmt(BIZ.reduce((a,b)=>a+p.biz[b.id]*b.inc,0))}</span> coins.</div></div>
+  </div>`;
+}
+function vParty(){
+  const p=S.player;const mine=p.partyId&&party(p.partyId);
+  const list=`<div class="panel"><h3>Registered parties</h3><div class="list">${[...S.parties].sort((a,b)=>b.members-a.members).map(x=>`<div class="li"><div><div class="row"><span class="dot" style="background:${x.color}"></span><b>${esc(x.name)}</b> <span class="muted">${esc(x.abbr)}</span></div>
+    <div class="small muted num">${fmt(x.members)} members · ${strength(x.id).toFixed(1)}% strength</div></div>
+    ${p.partyId===x.id?'<span class="chip pill-good">Your party</span>':(!p.partyId&&!p.inec?`<button class="btn" data-act="join" data-a="${x.id}">Join · 200 dues</button>`:'')}</div>`).join('')}</div></div>`;
+  let body='';
+  if(p.inec)body=`<div class="panel hero"><h3>You are INEC Chairman</h3><p class="small muted" style="margin:0">INEC officials must stay non-partisan. Resign from INEC to join politics again.</p></div>`;
+  else if(mine){body=`<div class="panel hero"><span class="eyebrow">${p.partyRole==='chair'?'National Chairman':'Card-carrying member'}</span>
+      <div class="row"><span class="dot" style="background:${mine.color};width:14px;height:14px"></span><h3>${esc(mine.name)}</h3></div>
+      <div class="num">${fmt(mine.members)} members · ${strength(mine.id).toFixed(1)}% national strength</div>${bar(strength(mine.id)*2)}
+      <div class="grid3">
+      <div class="action"><b>Volunteer at the ward</b><p>1 energy. Canvass door to door.</p><div><button class="btn" data-act="volunteer">Volunteer</button></div></div>
+      ${p.partyRole==='chair'?`<div class="action"><b>Grassroots mobilisation</b><p>Register 40k–120k new members.</p><div><button class="btn primary" data-act="mobilize">Mobilise · 2,000</button></div></div>
+      <div class="action"><b>National convention</b><p>200k–450k members and +2 influence.</p><div><button class="btn primary" data-act="convention">Hold · 8,000</button></div></div>
+      <div class="action"><b>Dissolve party</b><p>Your members scatter to other parties.</p><div><button class="btn warn" data-act="dissolve">Dissolve</button></div></div>`
+      :`<div class="action"><b>Decamp</b><p>Cross the carpet. You lose any ticket you hold.</p><div><button class="btn warn" data-act="decamp">Decamp</button></div></div>`}
+      </div></div>`;}
+  else body=`<div class="panel hero"><h3>Form your own party</h3><p class="small muted" style="margin:0">Costs 5,000 coins. You become National Chairman and other citizens can join you. Small parties grow as your influence grows.</p>
+    <div class="row"><label class="f" style="flex:2">Party name<input id="np-name" type="text" maxlength="40" placeholder="e.g. Area Youth Congress"></label>
+    <label class="f" style="flex:1">Abbreviation<input id="np-abbr" type="text" maxlength="6" placeholder="AYC"></label>
+    <label class="f">Colour<select id="np-color"><option value="#6B3FA0">Purple</option><option value="#0E8C8C">Teal</option><option value="#C2185B">Magenta</option><option value="#546E1A">Olive</option></select></label></div>
+    <div><button class="btn primary" data-act="create">Register with INEC · 5,000</button></div></div>`;
+  return `<div class="sec"><div><h2>Party</h2><p class="lede">No party, no ticket. Join one, or found your own and grow it into a movement.</p></div>${body}${list}</div>`;
+}
+function ballot(k,e){
+  const max=Math.max(...e.cands.map(c=>c.pop),1);
+  return `<div class="ballot">${e.cands.sort((a,b)=>b.pop-a.pop).map(c=>`<div class="cand${c.isPlayer?' me':''}"><div>${esc(c.name)}${c.isPlayer?' (you)':''} ${chip(c.partyId)}</div><div class="num small">${c.pop.toFixed(0)}</div>${bar(c.pop/max*100)}</div>`).join('')}</div>`;
+}
+function vCampaign(){
+  const p=S.player;const inf=influence();
+  const races=myKeys().map(k=>{const e=S.elections[k],t=typeOf(k),o=OFF[t],left=e.day-S.day,inc=S.offices[k];
+    const r=repu();const can=!p.race&&p.partyId&&!p.inec&&r>=o.minRep&&p.stash>=o.fee;
+    const why=p.inec?'INEC officials cannot run':!p.partyId?'Join a party first':p.race?(p.race===k?'':'Already running elsewhere'):r<o.minRep?`Needs reputation ${o.minRep} (you have ${r})`:p.stash<o.fee?`Stash ${fmt(o.fee)} coins first`:'';
+    return `<div class="panel${p.race===k?' hero':''}"><div class="row between"><div><span class="eyebrow">${o.title} · ${o.term}-day term</span><h3>${esc(place(k))}</h3></div>
+      <span class="chip ${left<=3?'pill-bad':left<=10?'pill-warn':''}">Poll in ${left} day${left===1?'':'s'}</span></div>
+      <div class="small muted">Incumbent: ${esc(inc.name)}${inc.isPlayer?' (you)':''} ${chip(inc.partyId)} · Nomination fee ${fmt(o.fee)} · Spending limit ${fmt(o.cap)}</div>
+      ${ballot(k,e)}
+      ${p.race===k?'':`<div class="row"><button class="btn primary" data-act="declare" data-a="${k}" ${can?'':'disabled'}>Declare candidacy</button><span class="small muted">${why}</span></div>`}</div>`;}).join('');
+  let camp='';
+  if(p.race){const m=OFF[typeOf(p.race)].mult,cap=OFF[typeOf(p.race)].cap,spent=S.elections[p.race].spent||0;
+    camp=`<div class="panel hero"><div class="row between"><div><span class="eyebrow">Your campaign</span><h3>${esc(officeName(p.race))}</h3></div><div class="small num">Stash ${fmt(p.stash)} · Energy ${p.energy}/6</div></div>
+    <div class="stat" style="grid-template-columns:auto 1fr auto"><span class="small">Spent</span><div class="bar ${spent/cap>.85?'b':spent/cap>.6?'w':'g'}"><i style="width:${Math.min(100,spent/cap*100)}%"></i></div><span class="num small">${fmt(spent)} / ${fmt(cap)}</span></div>
+    <div class="grid3">${CAMPAIGN.map(c=>`<div class="action"><b>${c.label}</b><p>${c.blurb}</p><div class="row"><button class="btn${c.scandal?' warn':' primary'}" data-act="camp" data-a="${c.id}" ${p.energy<c.e||spent+c.cost*m>cap?'disabled':''}>${c.cost?fmt(c.cost*m)+' coins':'Free'}</button></div></div>`).join('')}</div>
+    <div><button class="btn warn" data-act="withdraw">Withdraw from race</button></div></div>`;}
+  const res=S.results.filter(r=>myKeys().includes(r.k)).slice(0,4);
+  return `<div class="sec"><div><h2>Elections</h2><p class="lede">Stash coins, pick up a ticket and campaign. Every race has a legal spending limit, and you need earned reputation to run. Party strength, popularity and a little luck decide the count. Losers within 10% can go to tribunal.</p></div>
+  ${camp}<div class="grid">${races}</div>
+  ${res.length?`<div class="panel"><h3>Recent results near you</h3><div class="list">${res.map(r=>`<div class="li"><div><b>${esc(officeName(r.k))}</b><div class="small muted">Day ${r.day} · turnout ${fmt(r.turnout)}</div></div><div class="small">${esc(r.rows[0].name)} ${chip(r.rows[0].partyId)} <span class="num">${(r.rows[0].votes/r.turnout*100).toFixed(1)}%</span></div></div>`).join('')}</div></div>`:''}</div>`;
+}
+function vOffice(){
+  const p=S.player;
+  if(p.inec)return `<div class="sec"><div><h2>INEC Chairman</h2><p class="lede">You run every election in Niger Area. Parties will come to you with offers the night before big polls. Your salary is 600 coins a day.</p></div>
+    <div class="panel hero"><div class="row between"><span>Integrity</span><span class="num">${Math.round(p.integrity)}</span></div>${bar(p.integrity)}
+    <div class="list">${Object.entries(S.elections).filter(([k])=>typeOf(k)!=='LG').sort((a,b)=>a[1].day-b[1].day).slice(0,6).map(([k,e])=>`<div class="li"><div>${esc(officeName(k))}</div><div class="num small">Day ${e.day}</div></div>`).join('')}</div>
+    <div><button class="btn warn" data-act="resigninec">Resign from INEC</button></div></div></div>`;
+  if(!p.office)return `<div class="sec"><div><h2>Office</h2><p class="lede">You don't hold office yet. Win an election to govern: build roads, pay salaries, keep your people happy, and they may re-elect you.</p></div>
+    <div class="panel"><div class="row"><button class="btn primary" data-act="tab" data-a="campaign">See upcoming elections</button></div></div></div>`;
+  const k=p.office,t=typeOf(k),j=S.jur[k],o=OFF[t],ap=approval(k),left=S.offices[k].until-S.day;
+  const unpaid=S.day-(S.lastSalary[k]||0);
+  const act=(b,d,btn)=>`<div class="action"><b>${b}</b><p>${d}</p><div>${btn}</div></div>`;
+  const extra=t==='PRES'?`<div class="panel"><h3>International relations</h3><div class="grid3">
+      ${act('State visit abroad','30,000 from treasury. May land a trade deal that lifts the economy nationwide.','<button class="btn primary" data-act="visit">Travel</button>')}
+      ${act('Host ECOWAS summit','50,000 and 2 energy. +3 influence, national pride.','<button class="btn primary" data-act="summit">Host</button>')}
+      ${act('Foreign loan','+300,000 now, 360,000 debt. People grumble.',`<button class="btn" data-act="loan">Borrow</button>`)}
+      ${act('Appoint INEC Chairman',`Current: ${esc(S.inecChair)}`,'<button class="btn" data-act="appoint">Appoint new</button>')}
+      </div><div class="small muted num">National debt: ${fmt(j.debt)}</div></div>`
+    :t==='SEN'?`<div class="panel"><h3>Legislative work</h3><div class="grid3">${act('Sponsor a bill','2 energy. +3 integrity and rapport.','<button class="btn primary" data-act="bill">Sponsor</button>')}</div></div>`:'';
+  return `<div class="sec"><div><span class="eyebrow">${o.title} · ${left} days left in term</span><h2>${esc(officeName(k))}</h2><p class="lede">Salary ${fmt(o.salary)} coins a day. Monthly FAAC allocation ${fmt(o.alloc)}. Projects cost ${fmt(o.unit)} each.</p></div>
+  <div class="grid">
+    <div class="panel hero"><div class="row between"><span class="eyebrow">Approval</span><span class="chip pill-${tone(ap)==='g'?'good':tone(ap)==='w'?'warn':'bad'}">${ap>=60?'Popular':ap>=35?'Restless':'Angry'}</span></div>
+      <div class="big">${ap}%</div>${bar(ap)}
+      <div class="small muted">Rapport ${j.mood>=0?'+':''}${j.mood.toFixed(1)} · Treasury <span class="num">${fmt(j.treasury)}</span> · Salaries last paid ${unpaid} day${unpaid===1?'':'s'} ago</div></div>
+    <div class="panel"><span class="eyebrow">Community</span>${STATS.map(([s,l])=>`<div class="stat"><span>${l}</span>${bar(j[s])}<span class="num small">${Math.round(j[s])}</span></div>`).join('')}</div>
+  </div>
+  <div class="panel"><div class="row between"><h3>Projects</h3><span class="small num">Energy ${p.energy}/6</span></div><div class="grid3">
+    ${PROJECTS.map(pr=>act(pr.label,`${pr.blurb} ${pr.days} days.`,`<button class="btn primary" data-act="project" data-a="${pr.id}" ${j.treasury<o.unit||p.energy<1?'disabled':''}>Award · ${fmt(o.unit)}</button>`)).join('')}
+  </div>${S.projects.filter(x=>x.k===k).length?`<div class="small muted">Under construction: ${S.projects.filter(x=>x.k===k).map(x=>`${x.label} (${x.left}d)`).join(', ')}</div>`:''}</div>
+  <div class="panel"><h3>Your people</h3><div class="grid3">
+    ${act('Town hall meeting','1 energy. Listen, take photos, promise less.','<button class="btn primary" data-act="townhall">Hold</button>')}
+    ${act('Pay salaries',`${fmt(o.unit*.8)} from treasury. Skip 30 days and workers strike.`,'<button class="btn primary" data-act="salaries">Pay</button>')}
+    ${act('Divert funds','Move 20% of the treasury to your wallet. Scandal +25.','<button class="btn warn" data-act="loot">Divert</button>')}
+  </div></div>${extra}</div>`;
+}
+function vNation(){
+  const p=S.player;const pres=S.offices.PRES;
+  const inecAct=p.inec?'<span class="chip pill-good">You</span>':`<button class="btn" data-act="lobby">Lobby for the job · 3,000</button>`;
+  return `<div class="sec"><div><h2>Niger Area</h2><p class="lede">Who rules where, and how their people feel about it.</p></div>
+  <div class="grid">
+    <div class="panel hero"><span class="eyebrow">President · poll on Day ${S.elections.PRES.day}</span><h3>${esc(pres.name)}${pres.isPlayer?' (you)':''}</h3><div>${chip(pres.partyId)}</div>
+      <div class="stat"><span>Approval</span>${bar(approval('PRES'))}<span class="num small">${approval('PRES')}</span></div>
+      <div class="small muted">Treasury ${fmt(S.jur.PRES.treasury)} · Debt ${fmt(S.jur.PRES.debt)}</div></div>
+    <div class="panel"><span class="eyebrow">INEC Chairman · appointed by the President</span><h3>${esc(S.inecChair)}</h3>
+      <p class="small muted" style="margin:0">Must be non-partisan. Needs reputation 12 and integrity 40. 40% chance the Presidency picks you.</p><div>${inecAct}</div></div>
+  </div>
+  <div class="panel"><h3>States</h3><div class="table-wrap"><table><thead><tr><th>State</th><th>Governor</th><th>Senator</th><th>Approval</th></tr></thead><tbody>
+  ${STATES.map(s=>{const g=S.offices['GOV:'+s.id],sn=S.offices['SEN:'+s.id];const a=approval(g?'GOV:'+s.id:'SEN:'+s.id);
+    return `<tr${s.id===p.stateId?' style="font-weight:700"':''}><td>${s.name}</td><td>${g?esc(g.name)+' '+chip(g.partyId):'<span class="muted">FCT Minister (appointed)</span>'}</td><td>${esc(sn.name)} ${chip(sn.partyId)}</td><td style="min-width:120px">${bar(a)}<span class="num small">${a}</span></td></tr>`;}).join('')}
+  </tbody></table></div></div>
+  <div class="panel"><h3>Party map</h3><div class="list">${[...S.parties].sort((a,b)=>b.members-a.members).map(x=>{const held=Object.values(S.offices).filter(o=>o.partyId===x.id).length;
+    return `<div class="li"><div class="row"><span class="dot" style="background:${x.color}"></span>${esc(x.name)}</div><div class="small num">${held} office${held===1?'':'s'} · ${strength(x.id).toFixed(1)}%</div></div>`;}).join('')}</div></div></div>`;
+}
+function vNews(){return `<div class="sec"><div><h2>Niger Area Times</h2><p class="lede">Headlines from across the country.</p></div>
+  <div class="panel news"><div class="list">${S.news.map(n=>`<div class="li"><span class="d">Day ${n.d}</span><div>${esc(n.t)}</div></div>`).join('')}</div></div></div>`;}
+
+function vSetup(){
+  const sid=UI.su||'lagos';
+  return `<div class="wrap"><div class="setup">
+    <div><span class="stamp">Voter registration</span><h1>Niger Area</h1><p class="lede">A country where everybody is a citizen and anybody can rule. Earn coins, build a home, join or found a party, and run for LG Chairman, Senator, Governor or President.</p></div>
+    <div class="feature"><div>LG terms 30 days, Governors and Senators 60, President 120</div><div>1,000 free coins daily, up to 2,000 with ads</div><div>Form a party, cross the carpet, go to tribunal</div><div>Govern: roads, power, salaries, diplomacy</div></div>
+    <div class="panel hero">
+      <label class="f">Your name<input id="su-name" type="text" maxlength="40" placeholder="e.g. Adaeze Okafor"></label>
+      <div class="row"><label class="f" style="flex:1">State<select id="su-state">${STATES.map(s=>`<option value="${s.id}"${s.id===sid?' selected':''}>${s.name}</option>`).join('')}</select></label>
+      <label class="f" style="flex:1">Local government<select id="su-lga">${st(sid).lgas.map((l,i)=>`<option value="${i}">${l}</option>`).join('')}</select></label></div>
+      <div><button class="btn primary" data-act="start">Collect my voter's card</button></div>
+      <div class="small muted">Prototype. Your game saves in this browser. Coins, ads and airtime rewards are simulated.</div>
+    </div></div></div>`;
+}
+function vModal(){
+  const m=UI.modal||(S&&S.pending[0]?{type:'pending',...S.pending[0]}:null);if(!m)return '';
+  let h='';
+  if(m.type==='ad')h=`<h3>Sponsored</h3><div class="adbox">Ad playing… ${m.left}s</div><p class="small muted" style="margin:0">In the full game this is a real rewarded video ad.</p>`;
+  else if(m.type==='topup')h=`<h3>Top up coins</h3><p class="small muted" style="margin:0">Demo mode: no payment is taken. Bought coins can't be cashed out, don't earn civic points, and still count toward each race's spending limit.</p>
+    <div class="list">${[[5000,'₦500'],[12000,'₦1,000'],[30000,'₦2,000']].map(([c,n])=>`<div class="li"><div class="num">${fmt(c)} coins <span class="muted">· ${n}</span></div><button class="btn primary" data-act="pack" data-a="${c}">Add (demo)</button></div>`).join('')}</div><div><button class="btn" data-act="close">Close</button></div>`;
+  else if(m.type==='reset')h=`<h3>Start over?</h3><p style="margin:0">This deletes your citizen, coins and history in this browser.</p><div class="row"><button class="btn warn" data-act="doreset">Delete and restart</button><button class="btn" data-act="close">Keep playing</button></div>`;
+  else if(m.type==='bribe'){const pp=party(m.partyId);h=`<span class="eyebrow">Night before the poll</span><h3>A visitor from the ${esc(pp?.abbr||'')}</h3>
+    <p style="margin:0">A party chieftain drops a Ghana-must-go bag of <b class="num">${fmt(m.amount)}</b> coins at your gate. They want the ${esc(officeName(m.k))} results "adjusted".</p>
+    <div class="row"><button class="btn warn" data-act="bribe" data-a="1">Take it</button><button class="btn primary" data-act="bribe" data-a="0">Send them away</button></div>`;}
+  else if(m.type==='tribunal')h=`<h3>Go to tribunal?</h3><p style="margin:0">You lost the ${esc(officeName(m.k))} race to ${esc(m.winner)} by ${(m.margin*100).toFixed(1)}%. Lawyers want 2,000 coins. Your odds: about ${Math.max(0,Math.round((.45-m.margin*3)*100))}%.</p>
+    <div class="row"><button class="btn primary" data-act="tribunal" data-a="1">File petition</button><button class="btn" data-act="tribunal" data-a="0">Congratulate the winner</button></div>`;
+  else if(m.type==='result')h=`<span class="eyebrow">INEC declaration</span><h3>${m.won?'You won!':'You lost'}: ${esc(officeName(m.k))}</h3>
+    <div class="list">${m.rows.map(r=>`<div class="li"${r.isPlayer?' style="font-weight:700"':''}><div>${esc(r.name)} ${chip(r.partyId)}</div><div class="num">${fmt(r.votes)}</div></div>`).join('')}</div>
+    <div><button class="btn primary" data-act="ack">${m.won?'Take the oath of office':'Continue'}</button></div>`;
+  else if(m.type==='efcc')h=`<h3>Breaking</h3><p style="margin:0">${esc(m.text)}</p><div><button class="btn primary" data-act="ack">OK</button></div>`;
+  return `<div class="scrim"><div class="modal" role="dialog" aria-modal="true">${h}</div></div>`;
+}
+function renderToast(){let t=document.getElementById('toast');if(!UI.toast){if(t)t.remove();return;}if(!t){t=document.createElement('div');t.id='toast';t.className='toast';t.setAttribute('role','status');document.body.appendChild(t);}t.textContent=UI.toast;}
+function render(){
+  const app=document.getElementById('app');
+  if(!S){app.innerHTML=vSetup();return;}
+  const v={wallet:vWallet,home:vHome,party:vParty,campaign:vCampaign,office:vOffice,nation:vNation,news:vNews}[UI.tab]();
+  app.innerHTML=top()+`<main class="wrap">${tabs()}${v}</main>`+vModal();
+}
+
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const f=ACT[b.dataset.act];if(!f)return;
+  const a=b.dataset.a;f(a==='1'?true:a==='0'?false:a);});
+document.addEventListener('change',e=>{if(e.target.id==='su-state'){UI.su=e.target.value;const n=val('su-name');render();document.getElementById('su-name').value=n;}});
+
+function start(data){S=(data&&data.player)?data:load();if(S)migrate(S.player);render();}
+window.claude?.hot?.snapshot?.(()=>S);
+if(window.claude?.hot?.ready)window.claude.hot.ready(start);else start(window.claude?.hot?.data??{});
+</script>

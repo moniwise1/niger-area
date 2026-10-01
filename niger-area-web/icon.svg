@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#F5C518"/>
+  <rect x="0" y="440" width="512" height="72" fill="#16130A"/>
+  <rect x="96" y="96" width="320" height="300" rx="20" fill="#16130A"/>
+  <rect x="116" y="116" width="94" height="260" fill="#008751"/>
+  <rect x="210" y="116" width="92" height="260" fill="#FFFFFF"/>
+  <rect x="302" y="116" width="94" height="260" fill="#008751"/>
+  <text x="256" y="490" font-family="Arial Black, Arial, sans-serif" font-size="46" font-weight="900" fill="#F5C518" text-anchor="middle">NIGER AREA</text>
+</svg>
