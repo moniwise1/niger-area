@@ -182,14 +182,15 @@ function vSecurity() {
 }
 function render() {
   const app = document.getElementById('app');
+  if (recovering) { app.innerHTML = vRecovery(); return; }
   if (!user) { app.innerHTML = `<div class="setup"><span class="stamp">Owner only</span><h1>Control room</h1>
       <p class="lede">The Niger Area backend. Sign in with your owner account.</p>
       <form class="panel hero" onsubmit="event.preventDefault();ACT.signin()">
         <label class="f">Email<input id="si-email" type="email" autocomplete="username" required></label>
         <label class="f">Account password<input id="si-pass" type="password" autocomplete="current-password" required></label>
-        <div><button class="btn primary" type="submit">Sign in</button></div>
+        <div class="row"><button class="btn primary" type="submit">Sign in</button><button class="linkish small" type="button" data-act="forgot">Forgot password?</button></div>
         <p class="small muted">After this you'll also need your owner password.</p></form></div>`; return; }
-  if (!ok) { app.innerHTML = `<div class="setup"><span class="stamp">Owner only</span><h1>Control room</h1><p class="lede">This account does not have owner access.</p><div><button class="btn" data-act="signout">Sign out</button></div></div>`; return; }
+  if (!ok) { app.innerHTML = `<div class="setup"><span class="stamp">Owner only</span><h1>Control room</h1><p class="lede">You are signed in as <b>${esc(user.email)}</b>, which is not an owner account. Sign out and sign in with your owner email.</p><div><button class="btn" data-act="signout">Sign out</button></div></div>`; return; }
   if (!gate || !gate.unlocked) { app.innerHTML = gate ? vGate() : '<div class="setup"><span class="stamp">Loading</span></div>'; return; }
   const v = { overview: vOverview, players: vPlayers, reports: vReports, gist: vGist, network: vNetwork, redemptions: vRedemptions, log: vLog, settings: vSettings, security: vSecurity }[tab]();
   app.innerHTML = `<div class="shell"><header class="topbar"><div class="topbar-in"><div class="brand"><span class="flag"><i></i><i></i><i></i></span><div>Control room<small>Niger Area owner dashboard</small></div></div>
@@ -200,6 +201,7 @@ function render() {
 
 const ACT = {
   tab(k) { tab = k; render(); load().then(render); },
+  forgot() { sendReset(val('si-email').trim()); },
   async signin() {
     const { error } = await sb.auth.signInWithPassword({ email: val('si-email').trim(), password: val('si-pass') });
     if (error) toast(error.message, true);
@@ -252,6 +254,7 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && detail) ACT.close(); });
 
 sb.auth.onAuthStateChange((_e, session) => {
+  if (_e === 'PASSWORD_RECOVERY') recovering = true;
   user = session?.user || null;
   setTimeout(async () => { ok = user ? !!(await sb.rpc('is_admin')).data : false; if (ok) { await checkGate(); if (gate?.unlocked) await load(); } render(); }, 0);
 });

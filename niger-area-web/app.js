@@ -133,6 +133,7 @@ function go(p) { page = p; sheet = null; try { localStorage.setItem('na.page', p
 const ACT = {
   go, more() { sheet = { type: 'more' }; render(); }, close() { sheet = null; if (adTimer) clearInterval(adTimer); render(); },
   authmode(a) { authMode = a; render(); },
+  forgot() { sendReset(val('au-email').trim()); },
   async auth() {
     const email = val('au-email').trim(), password = val('au-pass');
     if (!email || password.length < 6) return toast('Enter your email and a password of at least 6 characters.', true);
@@ -350,6 +351,7 @@ function vAuth() {
       <label class="f">Password<input id="au-pass" type="password" autocomplete="${up ? 'new-password' : 'current-password'}" minlength="6" required></label>
       <div class="row"><button class="btn primary" type="submit">${up ? 'Create account' : 'Sign in'}</button>
       <button class="btn" type="button" data-act="authmode" data-a="${up ? 'signin' : 'signup'}">${up ? 'I already have an account' : 'Create a new account'}</button></div>
+      ${up ? '' : '<button class="linkish small" type="button" data-act="forgot">Forgot password?</button>'}
       <p class="small muted">One person, one voter's card: only one citizen can register per network.</p>
     </form></div>`;
 }
@@ -765,6 +767,7 @@ function vProfile() {
 /* ================= render & wiring ================= */
 function render() {
   const app = document.getElementById('app');
+  if (recovering) { app.innerHTML = vRecovery(); return; }
   if (!user) { app.innerHTML = vAuth(); return; }
   if (!R || !D) { app.innerHTML = '<div class="setup"><span class="stamp">Loading</span><h1>Niger Area</h1></div>'; return; }
   if (!D.me && D.isAdmin) { app.innerHTML = `<div class="setup"><span class="stamp">Owner account</span><h1>Niger Area</h1>
@@ -820,6 +823,7 @@ async function boot() {
   render();
 }
 sb.auth.onAuthStateChange((_ev, session) => {
+  if (_ev === 'PASSWORD_RECOVERY') { recovering = true; setTimeout(render, 0); }
   const was = user?.id; user = session?.user || null;
   if (!user) { D = null; if (rt) { sb.removeChannel(rt); rt = null; } render(); return; }
   if (was !== user.id) setTimeout(boot, 0);

@@ -31,6 +31,28 @@ function toast(msg, err) {
   t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg;
   clearTimeout(toast.t); toast.t = setTimeout(() => t.remove(), 3800);
 }
+// Password reset: email a link that comes back to this same page, then let the person choose a new password.
+let recovering = false;
+async function sendReset(email) {
+  if (!email) return toast('Type your email address first, then tap Forgot password.', true);
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+  if (error) return toast(error.message, true);
+  toast('If that email has an account, a reset link is on its way. Check your inbox and spam.');
+}
+async function saveNewPassword(a, b) {
+  if (a.length < 8) return toast('Use at least 8 characters.', true);
+  if (a !== b) return toast('The two passwords do not match.', true);
+  const { error } = await sb.auth.updateUser({ password: a });
+  if (error) return toast(error.message, true);
+  recovering = false; toast('Password changed. You are signed in.'); return true;
+}
+function vRecovery() {
+  return `<div class="setup"><span class="stamp">Reset password</span><h1>Niger Area</h1>
+    <form class="panel hero" onsubmit="event.preventDefault();saveNewPassword(val('rc-a'), val('rc-b')).then(ok => ok && location.reload())">
+      <label class="f">New password<input id="rc-a" type="password" autocomplete="new-password" minlength="8" required></label>
+      <label class="f">Type it again<input id="rc-b" type="password" autocomplete="new-password" minlength="8" required></label>
+      <div><button class="btn primary" type="submit">Save new password</button></div></form></div>`;
+}
 async function q(p) { const { data, error } = await p; if (error) throw error; return data; }
 
 // Time until the next game day (midnight West Africa Time).
