@@ -42,7 +42,7 @@ Suites: `engagement`, `rule_of_law`, `social`, `marriage`, `power`, `owner` (plu
 ## Deploying
 
 - **Database:** apply new files in `niger-area-backend/supabase/migrations` in order.
-- **Site:** from `niger-area-web`, run `npx vercel deploy --prod`.
+- **Site:** push to `main` on GitHub. Vercel publishes automatically (Root Directory is set to `niger-area-web`).
 
 ## Secrets
 
